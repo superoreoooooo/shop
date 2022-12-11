@@ -1,0 +1,5 @@
+name: Shop
+version: '${project.version}'
+main: xyz.oreodev.shop.Shop
+commands:
+  shop:
