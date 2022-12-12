@@ -7,11 +7,9 @@ import xyz.oreodev.shop.command.tabComplete.shopCompleter;
 import xyz.oreodev.shop.listener.shopListener;
 import xyz.oreodev.shop.manager.ymlManager;
 import xyz.oreodev.shop.util.m;
-import xyz.oreodev.shop.util.shopUtil;
 
 public final class Shop extends JavaPlugin {
     public ymlManager ymlManager;
-    public shopUtil util;
 
     @Override
     public void onEnable() {

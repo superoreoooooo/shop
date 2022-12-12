@@ -1,6 +1,5 @@
 package xyz.oreodev.shop.listener;
 
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

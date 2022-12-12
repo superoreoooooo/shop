@@ -110,7 +110,7 @@ public class shopUtil {
         }
         UUID key = getIDFromName(name);
         shopInventory shopInventory = new shopInventory(key, getSavedTitle(key), getSavedInventorySize(key));
-        player.sendMessage("UUID  > " + key.toString());
+        player.sendMessage("UUID  > " + key);
         player.sendMessage("Title > " + getSavedTitle(key));
         player.sendMessage("Size  > " + getSavedInventorySize(key));
         for (int i = 0; i < getSavedInventorySize(key); i++) {

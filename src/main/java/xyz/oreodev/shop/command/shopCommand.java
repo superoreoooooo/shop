@@ -1,17 +1,14 @@
 package xyz.oreodev.shop.command;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import xyz.oreodev.shop.util.shopInventory;
 import xyz.oreodev.shop.util.shopUtil;
 
 import java.util.*;
 
 public class shopCommand implements CommandExecutor {
-    private static shopInventory shopInventory;
     private shopUtil util;
 
     public static List<Player> editorList = new ArrayList<>();
