@@ -1,30 +1,20 @@
 package xyz.oreodev.shop.command;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import xyz.oreodev.shop.util.shopInventory;
 import xyz.oreodev.shop.util.shopUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class shopCommand implements CommandExecutor {
     private static shopInventory shopInventory;
     private shopUtil util;
 
     public static List<Player> editorList = new ArrayList<>();
-
-    public static final String bar = ChatColor.GREEN + "====================================================";
 
     public shopCommand() {
         this.util = new shopUtil();
@@ -36,143 +26,42 @@ public class shopCommand implements CommandExecutor {
             Player player = ((Player) sender).getPlayer();
             util.initialize();
             if (args.length == 0) {
-                player.sendMessage(bar);
                 player.sendMessage("/shop list | open (name) | remove (name) | edit (name) | create (name) (size)");
-                player.sendMessage(bar);
             }
-            if (args.length == 1) {
-                if (args[0].equalsIgnoreCase("list") || args[0].equalsIgnoreCase("l")) {
-                    player.sendMessage(bar);
-                    player.sendMessage("total shop count : " + shopUtil.shopMap.size());
-                    for (UUID uuid : shopUtil.shopMap.keySet()) {
-                        player.sendMessage("UUID : " + uuid.toString() + " | Title : " + util.getSavedTitle(uuid) + " | Size : " + util.getSavedInventorySize(uuid));
-                    }
-                    player.sendMessage(bar);
+            else if (args.length == 1) {
+                if (args[0].equalsIgnoreCase("list")) {
+                    util.listShop(player);
                 }
-                if (args[0].equalsIgnoreCase("item")) {
-                    player.sendMessage("confirmed!");
-                    ItemStack itemStack = new ItemStack(Material.BLAZE_ROD);
-                    ItemMeta itemMeta = itemStack.getItemMeta();
-                    itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + "밀치기 막대");
-                    itemMeta.setUnbreakable(true);
-                    itemMeta.setLore(Arrays.asList(ChatColor.GOLD + "밀치기 막대(테스트)"));
-                    itemMeta.addEnchant(Enchantment.KNOCKBACK, 31321, true);
-                    itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
-                    itemStack.setItemMeta(itemMeta);
-                    player.getInventory().addItem(itemStack);
-                } else {
-                    player.sendMessage(bar);
+                else if (args[0].equalsIgnoreCase("item")) {
+                    util.giveItem(player);
+                }
+                else {
                     player.sendMessage("/shop list | open (name) | remove (name) | edit (name) | create (name) (size)");
-                    player.sendMessage(bar);
                 }
             }
-            if (args.length == 2) {
-                if (args[0].equalsIgnoreCase("open") || args[0].equalsIgnoreCase("o")) {
-                    for (String name : shopUtil.shopMap.values()) {
-                        if (args[1].equalsIgnoreCase(name)) {
-                            for (UUID key : shopUtil.shopMap.keySet()) {
-                                if (shopUtil.shopMap.get(key).equalsIgnoreCase(name)) {
-                                    shopInventory shopInventory = new shopInventory(key, new shopUtil().getSavedTitle(key), new shopUtil().getSavedInventorySize(key));
-                                    player.openInventory(shopInventory.getInventory());
-                                }
-                            }
-                        }
-                    }
+            else if (args.length == 2) {
+                if (args[0].equalsIgnoreCase("open")) {
+                    util.openShop(player, args[1]);
                 }
-                if (args[0].equalsIgnoreCase("edit") || args[0].equalsIgnoreCase("e")) {
-                    for (String name : shopUtil.shopMap.values()) {
-                        if (args[1] == null) {
-                            player.sendMessage(bar);
-                            player.sendMessage("/shop edit (name)");
-                            player.sendMessage(bar);
-                            return false;
-                        }
-                        if (args[1].equalsIgnoreCase(name)) {
-                            for (UUID key : shopUtil.shopMap.keySet()) {
-                                if (shopUtil.shopMap.get(key).equalsIgnoreCase(name)) {
-                                    player.sendMessage(bar);
-                                    player.sendMessage("UUID  > " + key.toString());
-                                    player.sendMessage("Title > " + util.getSavedTitle(key));
-                                    player.sendMessage("Size  > " + util.getSavedInventorySize(key));
-                                    for (int i = 0; i < util.getSavedInventorySize(key); i++) {
-                                        player.sendMessage("Item" + i + "  > " + util.getSavedItemStack(key, i));
-                                    }
-                                    player.sendMessage(bar);
-                                    player.openInventory(new shopInventory(key, new shopUtil().getSavedTitle(key), new shopUtil().getSavedInventorySize(key)).getInventory());
-                                    editorList.add(player);
-                                }
-                            }
-                        }
-                    }
+                else if (args[0].equalsIgnoreCase("edit")) {
+                    util.editShop(player, args[1]);
                 }
-                if (args[0].equalsIgnoreCase("remove") || args[0].equalsIgnoreCase("r")) {
-                    int cnt = 0;
-                    for (String name : shopUtil.shopMap.values()) {
-                        if (args[1].equalsIgnoreCase(name)) {
-                            for (UUID key : shopUtil.shopMap.keySet()) {
-                                if (shopUtil.shopMap.get(key).equalsIgnoreCase(name)) {
-                                    player.sendMessage(bar);
-                                    player.sendMessage("UUID  > " + key.toString());
-                                    player.sendMessage("Title > " + util.getSavedTitle(key));
-                                    player.sendMessage("Size  > " + util.getSavedInventorySize(key));
-                                    for (int i = 0; i < util.getSavedInventorySize(key); i++) {
-                                        player.sendMessage("Item" + i + "  > " + util.getSavedItemStack(key, i));
-                                    }
-                                    util.removeInventory(key);
-                                    shopUtil.shopMap.remove(key);
-                                    cnt++;
-                                    player.sendMessage(bar);
-                                }
-                            }
-                        }
-                    }
-                    if (cnt == 0) {
-                        player.sendMessage(bar);
-                        player.sendMessage("nothing removed..");
-                        player.sendMessage(bar);
-                    }
+                else if (args[0].equalsIgnoreCase("remove")) {
+                    util.removeShop(player, args[1]);
                 } else {
-                    player.sendMessage(bar);
                     player.sendMessage("/shop list | open (name) | remove (name) | edit (name) | create (name) (size)");
-                    player.sendMessage(bar);
                 }
             }
-            if (args.length == 3) {
+            else if (args.length == 3) {
                 if (args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("c")) {
-                    for (String name : shopUtil.shopMap.values()) {
-                        if (args[1].equalsIgnoreCase(name)) {
-                            player.sendMessage(bar);
-                            player.sendMessage("overlapping names are impossible");
-                            player.sendMessage(bar);
-                            return false;
-                        }
-                    }
-                    if (Integer.parseInt(args[2]) % 9 != 0) {
-                        player.sendMessage(bar);
-                        player.sendMessage("chest size must be multiples of 9");
-                        player.sendMessage(bar);
-                        return false;
-                    }
-                    shopInventory = new shopInventory(UUID.randomUUID(), args[1], Integer.parseInt(args[2]));
-                    player.sendMessage(bar);
-                    player.sendMessage("new Shop Created");
-                    player.sendMessage("UUID  > " + shopInventory.getInventoryID());
-                    player.sendMessage("Title > " + shopInventory.getTitle());
-                    player.sendMessage("Size  > " + shopInventory.getSize());
-                    player.sendMessage(bar);
-                    player.openInventory(shopInventory.getInventory());
-                    shopUtil.shopMap.put(shopInventory.getInventoryID(), shopInventory.getTitle());
-                    editorList.add(player);
-                } else {
-                    player.sendMessage(bar);
+                    util.createShop(player, args[1], args[2]);
+                }
+                else {
                     player.sendMessage("/shop list | open (name) | remove (name) | edit (name) | create (name) (size)");
-                    player.sendMessage(bar);
                 }
             }
             else {
-                player.sendMessage(bar);
                 player.sendMessage("/shop list | open (name) | remove (name) | edit (name) | create (name) (size)");
-                player.sendMessage(bar);
             }
         }
         return false;

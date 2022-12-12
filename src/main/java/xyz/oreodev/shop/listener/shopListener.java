@@ -86,7 +86,6 @@ public class shopListener implements Listener {
     public void onClose(InventoryCloseEvent e) {
         if (e.getInventory().getTitle().contains("_상점")) {
             String[] storeName = e.getInventory().getTitle().split("_");
-            e.getPlayer().sendMessage(shopCommand.bar);
             e.getPlayer().sendMessage("closed shop : " + storeName[0]);
             if (shopCommand.editorList.contains((Player)e.getPlayer())) {
                 e.getPlayer().sendMessage("Saved items");
@@ -103,7 +102,6 @@ public class shopListener implements Listener {
                                     }
                                 }
                             }
-                            e.getPlayer().sendMessage(shopCommand.bar);
                         }
                     }
                 }
