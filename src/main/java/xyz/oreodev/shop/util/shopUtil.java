@@ -17,7 +17,6 @@ public class shopUtil {
     }
 
     public void initialize() {
-        Bukkit.getConsoleSender().sendMessage("LOADING...");
         for (String uuid : plugin.ymlManager.getConfig().getConfigurationSection("shop.").getKeys(false)) {
             shopMap.put(UUID.fromString(uuid), getSavedTitle(UUID.fromString(uuid)));
         }

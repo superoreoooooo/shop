@@ -42,6 +42,10 @@ public class shopCommand implements CommandExecutor {
                         player.sendMessage("UUID : " + uuid.toString() + " | Title : " + util.getSavedTitle(uuid) + " | Size : " + util.getSavedInventorySize(uuid));
                     }
                     player.sendMessage(bar);
+                } else {
+                    player.sendMessage(bar);
+                    player.sendMessage("/shop list | open (name) | remove (name) | edit (name) | create (name) (size)");
+                    player.sendMessage(bar);
                 }
             }
             if (args.length == 2) {
@@ -59,6 +63,12 @@ public class shopCommand implements CommandExecutor {
                 }
                 if (args[0].equalsIgnoreCase("edit") || args[0].equalsIgnoreCase("e")) {
                     for (String name : shopUtil.shopMap.values()) {
+                        if (args[1] == null) {
+                            player.sendMessage(bar);
+                            player.sendMessage("/shop edit (name)");
+                            player.sendMessage(bar);
+                            return false;
+                        }
                         if (args[1].equalsIgnoreCase(name)) {
                             for (UUID key : shopUtil.shopMap.keySet()) {
                                 if (shopUtil.shopMap.get(key).equalsIgnoreCase(name)) {
@@ -103,6 +113,10 @@ public class shopCommand implements CommandExecutor {
                         player.sendMessage("nothing removed..");
                         player.sendMessage(bar);
                     }
+                } else {
+                    player.sendMessage(bar);
+                    player.sendMessage("/shop list | open (name) | remove (name) | edit (name) | create (name) (size)");
+                    player.sendMessage(bar);
                 }
             }
             if (args.length == 3) {
@@ -130,7 +144,16 @@ public class shopCommand implements CommandExecutor {
                     player.sendMessage(bar);
                     player.openInventory(shopInventory.getInventory());
                     shopUtil.shopMap.put(shopInventory.getInventoryID(), shopInventory.getTitle());
+                } else {
+                    player.sendMessage(bar);
+                    player.sendMessage("/shop list | open (name) | remove (name) | edit (name) | create (name) (size)");
+                    player.sendMessage(bar);
                 }
+            }
+            else {
+                player.sendMessage(bar);
+                player.sendMessage("/shop list | open (name) | remove (name) | edit (name) | create (name) (size)");
+                player.sendMessage(bar);
             }
         }
         return false;

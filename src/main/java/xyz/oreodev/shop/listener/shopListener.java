@@ -1,5 +1,6 @@
 package xyz.oreodev.shop.listener;
 
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -99,5 +100,6 @@ public class shopListener implements Listener {
                 }
             }
         }
+        shopCommand.editorList.remove((Player)e.getPlayer());
     }
 }
