@@ -22,18 +22,19 @@ public class shopListener implements Listener {
     public void onOpen(InventoryOpenEvent e) {
         if (shopCommand.editorList.contains((Player)e.getPlayer())) return;
         if (e.getInventory().getTitle().contains("_상점")) {
-            e.getPlayer().sendMessage("opened");
+            e.getPlayer().sendMessage("opened shop : " + e.getInventory().getTitle().split("_")[0]);
         }
     }
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
         if (shopCommand.editorList.contains((Player)e.getWhoClicked())) return;
+        if (e.getClickedInventory() == null || !e.getClick().equals(ClickType.SHIFT_LEFT) || !e.getClick().equals(ClickType.SHIFT_RIGHT) || !e.getClick().equals(ClickType.DOUBLE_CLICK)) {
+            return;
+        }
         if (e.getClickedInventory().getTitle().contains("_상점")) {
             e.setCancelled(true);
-
             Player player = (Player) e.getWhoClicked();
-            player.sendMessage("canceled1");
             player.getInventory().addItem(e.getCurrentItem());
         }
     }
@@ -43,7 +44,6 @@ public class shopListener implements Listener {
         if (shopCommand.editorList.contains((Player)e.getWhoClicked())) return;
         if (e.getInventory().getTitle().contains("_상점")) {
             e.setCancelled(true);
-            e.getWhoClicked().sendMessage("canceled2");
         }
     }
 
@@ -70,7 +70,6 @@ public class shopListener implements Listener {
             e.setCancelled(true);
 
             Player player = (Player) e.getWhoClicked();
-            player.sendMessage("canceled2");
             player.getInventory().addItem(e.getOldCursor());
         }
     }
@@ -86,15 +85,25 @@ public class shopListener implements Listener {
     @EventHandler
     public void onClose(InventoryCloseEvent e) {
         if (e.getInventory().getTitle().contains("_상점")) {
-            e.getPlayer().sendMessage("closed");
             String[] storeName = e.getInventory().getTitle().split("_");
+            e.getPlayer().sendMessage(shopCommand.bar);
+            e.getPlayer().sendMessage("closed shop : " + storeName[0]);
+            if (shopCommand.editorList.contains((Player)e.getPlayer())) {
+                e.getPlayer().sendMessage("Saved items");
+            }
             for (String str : shopUtil.shopMap.values()) {
                 if (str.equalsIgnoreCase(storeName[0])) {
                     for (UUID uuid : shopUtil.shopMap.keySet()) {
                         if (shopUtil.shopMap.get(uuid).equalsIgnoreCase(storeName[0])) {
                             for (int i = 0; i < e.getInventory().getSize(); i++) {
                                 util.saveItemStack(uuid, i, e.getInventory().getItem(i));
+                                if (shopCommand.editorList.contains((Player)e.getPlayer())) {
+                                    if (e.getInventory().getItem(i) != null) {
+                                        e.getPlayer().sendMessage(e.getInventory().getItem(i).getType().name());
+                                    }
+                                }
                             }
+                            e.getPlayer().sendMessage(shopCommand.bar);
                         }
                     }
                 }

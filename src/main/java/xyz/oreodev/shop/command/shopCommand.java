@@ -1,14 +1,20 @@
 package xyz.oreodev.shop.command;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import xyz.oreodev.shop.util.shopInventory;
 import xyz.oreodev.shop.util.shopUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +24,7 @@ public class shopCommand implements CommandExecutor {
 
     public static List<Player> editorList = new ArrayList<>();
 
-    public final String bar = ChatColor.GREEN + "====================================================";
+    public static final String bar = ChatColor.GREEN + "====================================================";
 
     public shopCommand() {
         this.util = new shopUtil();
@@ -42,6 +48,18 @@ public class shopCommand implements CommandExecutor {
                         player.sendMessage("UUID : " + uuid.toString() + " | Title : " + util.getSavedTitle(uuid) + " | Size : " + util.getSavedInventorySize(uuid));
                     }
                     player.sendMessage(bar);
+                }
+                if (args[0].equalsIgnoreCase("item")) {
+                    player.sendMessage("confirmed!");
+                    ItemStack itemStack = new ItemStack(Material.BLAZE_ROD);
+                    ItemMeta itemMeta = itemStack.getItemMeta();
+                    itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + "밀치기 막대");
+                    itemMeta.setUnbreakable(true);
+                    itemMeta.setLore(Arrays.asList(ChatColor.GOLD + "밀치기 막대(테스트)"));
+                    itemMeta.addEnchant(Enchantment.KNOCKBACK, 31321, true);
+                    itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+                    itemStack.setItemMeta(itemMeta);
+                    player.getInventory().addItem(itemStack);
                 } else {
                     player.sendMessage(bar);
                     player.sendMessage("/shop list | open (name) | remove (name) | edit (name) | create (name) (size)");
@@ -144,6 +162,7 @@ public class shopCommand implements CommandExecutor {
                     player.sendMessage(bar);
                     player.openInventory(shopInventory.getInventory());
                     shopUtil.shopMap.put(shopInventory.getInventoryID(), shopInventory.getTitle());
+                    editorList.add(player);
                 } else {
                     player.sendMessage(bar);
                     player.sendMessage("/shop list | open (name) | remove (name) | edit (name) | create (name) (size)");

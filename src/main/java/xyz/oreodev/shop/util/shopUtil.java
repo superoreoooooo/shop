@@ -56,4 +56,13 @@ public class shopUtil {
         plugin.ymlManager.getConfig().set("shop." + InventoryID.toString(), null);
         plugin.ymlManager.saveConfig();
     }
+
+    public UUID getIDFromName(String name) {
+        for (UUID key : shopUtil.shopMap.keySet()) {
+            if (shopUtil.shopMap.get(key).equalsIgnoreCase(name)) {
+                return key;
+            }
+        }
+        return null;
+    }
 }
