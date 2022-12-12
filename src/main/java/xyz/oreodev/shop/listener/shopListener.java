@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.oreodev.shop.Shop;
 import xyz.oreodev.shop.command.shopCommand;
@@ -52,7 +53,7 @@ public class shopListener implements Listener {
 
     @EventHandler
     public void onOpen(InventoryOpenEvent e) {
-        if (shopCommand.editorList.contains((Player)e.getPlayer())) return;
+        if (shopCommand.editorList.contains((Player) e.getPlayer())) return;
         if (e.getInventory().getTitle().contains("_상점")) {
             e.getPlayer().sendMessage("opened shop : " + e.getInventory().getTitle().split("_")[0]);
         }
@@ -61,58 +62,11 @@ public class shopListener implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent e) {
         if (shopCommand.editorList.contains((Player)e.getWhoClicked())) return;
-        if (e.getClickedInventory() == null || !e.getClick().equals(ClickType.SHIFT_LEFT) || !e.getClick().equals(ClickType.SHIFT_RIGHT) || !e.getClick().equals(ClickType.DOUBLE_CLICK)) {
-            return;
-        }
-        if (e.getClickedInventory().getTitle().contains("_상점")) {
-            e.setCancelled(true);
-            Player player = (Player) e.getWhoClicked();
-            player.getInventory().addItem(e.getCurrentItem());
-        }
+        if (e.getClickedInventory() == null) return;
+        //currentItem :
+        e.getWhoClicked().sendMessage(e.getClickedInventory().getName() + " // " + e.getClick().toString() + " // " + e.getCurrentItem().getType().toString() + " // " + e.getCursor().getType().toString() + " // " + e.getAction().toString());
     }
-
-    @EventHandler
-    public void onMoveItem(InventoryDragEvent e) {
-        if (shopCommand.editorList.contains((Player)e.getWhoClicked())) return;
-        if (e.getInventory().getTitle().contains("_상점")) {
-            e.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onMoveItem2(InventoryPickupItemEvent e) {
-        if (shopCommand.editorList.contains((Player)e.getHandlers())) return;
-        if (e.getInventory().getTitle().contains("_상점")) {
-            e.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onShiftClick(InventoryClickEvent e) {
-        if (shopCommand.editorList.contains((Player)e.getWhoClicked())) return;
-        if (e.getInventory().getTitle().contains("_상점")) {
-            e.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onDrag(InventoryDragEvent e) {
-        if (shopCommand.editorList.contains((Player)e.getWhoClicked())) return;
-        if (e.getInventory().getTitle().contains("_상점")) {
-            e.setCancelled(true);
-
-            Player player = (Player) e.getWhoClicked();
-            player.getInventory().addItem(e.getOldCursor());
-        }
-    }
-
-    @EventHandler
-    public void onMoveItem(InventoryMoveItemEvent e) {
-        if (shopCommand.editorList.contains((Player)e.getHandlers())) return;
-        if (e.getDestination().getTitle().contains("_상점")) {
-            e.setCancelled(true);
-        }
-    }
+    //todo fix / test inventory
 
     @EventHandler
     public void onClose(InventoryCloseEvent e) {

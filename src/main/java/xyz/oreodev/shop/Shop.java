@@ -19,6 +19,8 @@ public final class Shop extends JavaPlugin {
         getCommand("shop").setTabCompleter(new shopCompleter());
         this.ymlManager = new ymlManager(this);
         new m("hello world!");
+
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "shop");
     }
 
     @Override
