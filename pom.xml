@@ -39,7 +39,7 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <outputFile>D:\Shop\plugins\shop.jar</outputFile>
+                            <outputFile>D:\test\plugins\shop.jar</outputFile>
                         </configuration>
                     </execution>
                 </executions>

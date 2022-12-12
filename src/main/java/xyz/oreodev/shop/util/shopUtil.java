@@ -95,7 +95,6 @@ public class shopUtil {
 
     public void openShop(Player player, String name) {
         if (!shopMap.containsValue(name)) {
-            player.sendMessage("/shop open (name)");
             return;
         }
         UUID key = getIDFromName(name);

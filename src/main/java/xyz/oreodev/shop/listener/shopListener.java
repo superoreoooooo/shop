@@ -1,20 +1,53 @@
 package xyz.oreodev.shop.listener;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.plugin.java.JavaPlugin;
+import xyz.oreodev.shop.Shop;
 import xyz.oreodev.shop.command.shopCommand;
 import xyz.oreodev.shop.util.shopUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
 public class shopListener implements Listener {
     private shopUtil util;
 
+    List<Player> coolDown = new ArrayList<>();
+
     public shopListener() {
         this.util = new shopUtil();
+    }
+
+    public void delay(Player player) {
+        coolDown.add(player);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getPlugin(Shop.class), () -> coolDown.remove(player), 20);
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractAtEntityEvent e) {
+        Player player = e.getPlayer();
+        if (coolDown.contains(player)) return;
+        delay(player);
+        player.setCooldown(player.getInventory().getItemInMainHand().getType(), 20);
+        if (e.getRightClicked().getType().equals(EntityType.PLAYER)) {
+            if (e.getRightClicked().hasMetadata("npc")) {
+                String str = e.getRightClicked().getMetadata("npc").get(0).asString();
+                player.sendMessage(str);
+                util.openShop(player, str);
+            }
+        }
     }
 
     @EventHandler

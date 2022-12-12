@@ -1,6 +1,7 @@
 package xyz.oreodev.shop;
 
 import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.oreodev.shop.command.shopCommand;
 import xyz.oreodev.shop.command.tabComplete.shopCompleter;
